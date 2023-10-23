@@ -1,0 +1,56 @@
+- name: Elastic Search Package in Ubuntu
+  shell: wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+  when: ansible_distribution == "Ubuntu"
+
+- name: Update again Ubuntu to read the Elastic Search Package
+  apt:
+    upgrade: dist
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Ubuntu"
+
+- name: Add Elasticsearch APT GPG Key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  when: ansible_distribution == "Ubuntu"
+
+- name: Add Elasticsearch APT Repository
+  apt_repository:
+    repo: 'deb https://artifacts.elastic.co/packages/7.x/apt stable main'
+    state: present
+  when: ansible_distribution == "Ubuntu"
+
+- name: Update APT Package Cache
+  apt:
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install Elasticsearch
+  apt:
+    name: elasticsearch
+    state: present
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install Kibana in Ubuntu
+  apt:
+    name: kibana
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: Start Kibana
+  service:
+    name: kibana
+    state: restarted
+
+- name: Install Logstash in Ubuntu
+  apt:
+    name: logstash
+    state: latest
+    update_cache:  yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: Start Logstash
+  service:
+    name: logstash
+    state: restarted
