@@ -4,5 +4,6 @@
   become: yes
 
   roles:
-    - centOS-stack
-    - ubuntu-stack
+    - elasticsearch
+    - kibana
+    - logstash
